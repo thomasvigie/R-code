@@ -20,6 +20,24 @@ name_k <- function(k, char)    # gives names according to some character and the
   paste(char, k, sep = "_")
 }
 
+# Dummysator creates a vector of 1 and 0 corresponding to the a character in the "data" vector
+dummysator <- function(data, chr)
+{
+  res <- ifelse(data == chr, 1, 0)  
+  return(res)
+}
+
+# A function that creates all the dummies required in a dataset and adds them to the dataset
+
+dum_data <- function(data, var, chr, new_names)
+{
+  dum <- map(chr, dummysator, data = var)
+  dum <- data.frame(reduce(dum, cbind))
+  names(dum) <- new_names
+  data <- cbind(data, dum)
+  return(data)
+}
+
 iv_k <- function(Y, X, Z, W, k, weights = NULL)
 {
   if(missing(W))
