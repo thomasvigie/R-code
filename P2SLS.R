@@ -1,19 +1,13 @@
-# This function implements the P2SLS estimator -------------------------------------
-
-# Some auxiliary functions that might be removed later --------------------------------------
-
-# rep.col and re.row are taken from
-# https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/
-
-rep.col <- function(x, n)
-{
-  matrix(rep(x, each = n), ncol = n, byrow = TRUE)
-}
-
-rep.row <- function(x, n)    # functions to repeat a vector in the repmat way
-{
-  matrix(rep(x, each = n), nrow = n)
-}
+# This function implements the P2SLS ("Polynomial two stage least squares") estimator. It contains the following functions:  
+#    name_k: a function that returns a character in the form "char_k" where char and k are provided by the user
+#    dummysator: a function that creates a vector of 1 and 0 corresponding to the a character in the "data" vector
+#    dum_data: a function that creates all the dummies required in a dataset and adds them to the dataset
+#    iv_k: a function that uses the ivreg function from AER package to compute the 2SLS estimates of X on Y using instruments Z. Polynomials of Z are created (to the order k), 
+#          and if Z has dimension > 1 (more than one instrument), the polynomials of Z are orthogonalized using the Graham-Schmidt algorithm from the pracma package
+#    pluginMSE: a function that computes the plug-in MSE of the two stage least squares estimates using the plug-in formula of Vigié (2021): "Improving 2SLS: polynomial-augmented 2SLS"
+#    P2SLS: a function that finds the best polynomial combination of the instruments to include in the first stage for the estimation of slope parameters in a linear model using the two stage least squares estimator
+#           Y is the dependent variable vector, X is the matrix of endogenous regressors, W is the matrix of exogenous regressors, K is the maximal order for polynomials of the instrument matrix Z
+#           An example is provided at the end
 
 name_k <- function(k, char)    # gives names according to some character and the numeric variable k
 {
@@ -66,12 +60,6 @@ iv_k <- function(Y, X, Z, W, k, weights = NULL)
     b_2sls <- AER::ivreg( Y ~ X + W| psiz + W, weights = weights)$coefficients["X"]  # We use orthogonal polynomials
   }
   return(b_2sls)
-}
-
-iv_k_se <- function(data,k)
-{
-  sd_2sls <- ivreg( y ~ - 1 + x | poly(data[, 5], k, raw = F, simple = TRUE), data = data)$cov.unscaled
-  return(sd_2sls)
 }
 
 pluginMSE <- function(Y, X, Z, k, W, weights = NULL, raw = F, int = c(TRUE, FALSE))
