@@ -7,10 +7,10 @@
 #   - The continuously updated estimator (CU)
 # The function uses the global optimization algorithm "DEoptim" from Ardia et al. (2012)
 
-# Details about the function --------------------------
+# Details about the functions --------------------------
 
 # The functions are:
-#   - smoothG: in time series contexts, the moment conditions can smoothed out to account for serial dependence. Same function as in the "gmm" package.
+#   - smoothG: in time series contexts, the moment conditions can be smoothed out to account for serial dependence. Same function as in the "gmm" package.
 #   - inner: function that returns the value of the inner function, a function of the Lagrange multipliers lambdas and theta, the parameter vector of interest.
 #   - innergradient: function that returns the gradient of the inner function for each type of likelihood. Used in "getlambdas".
 #   - outer: returns the outer function for any value of theta, i.e. the "inner" function after it is minimized w.r.t. lambdas.
@@ -18,8 +18,8 @@
 #   - impliedprobs: computes the probabilities on each observation that are implied by the Lagrange multipliers found after solving the "inner" problem.
 #   - likelihood: computes the likelihood function using the implied probabilities (via the function "impliedprobs") computed for each type of empirical likelihood estimator. 
 #                 The implied probabilities are a function of the Lagrange multipliers, computed via "getlambdas".
-#   - GEL: the final function that computes the estimates by minimizing the "outer" function. It uses the "DEoptim" package. It returns the estimates of theta, the value of the objective function,
-#          the corresponding Lagrange multipliers and the implied probabilities.
+#   - GEL: the final function that computes the estimates by minimizing the "outer" function. It uses the "DEoptim" package from David Ardia, Katharine Mullen, Brian Peterson, Joshua Ulrich, and Kris Boudt (https://cran.r-project.org/web/packages/DEoptim/index.html). 
+#          It returns the estimates of theta, the value of the objective function, the corresponding Lagrange multipliers and the implied probabilities.
                  
 
 list.of.packages <- c('DEoptim','sandwich','gmm')
