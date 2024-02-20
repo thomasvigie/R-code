@@ -1,4 +1,4 @@
-# This function estimates the parameters from moment conditions using the 2-step method or cue method  
+# This function estimates the parameters from moment conditions using the 2-step method or the CUE ("continusously updated") method  
 
 # Details ----------------------------
 # This script contains the following functions:
